@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: monitoring-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: monitoring
+  template:
+    metadata:
+      labels:
+        app: monitoring
+    spec:
+      containers:
+        - name: monitoring
+          image: <region>.icr.io/<namespace-name>/monitoring-service:latest
+          env:
+            - name: ALERT_RECIPIENT
+              valueFrom:
+                secretKeyRef:
+                  name: monitoring-secrets
+                  key: alert-email
